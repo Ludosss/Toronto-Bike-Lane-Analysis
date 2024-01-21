@@ -10,7 +10,6 @@
 #### Workspace setup ####
 library(tidyverse)
 library(readxl)
-library(lubridate)
 
 #### Clean data ####
 
@@ -22,13 +21,18 @@ types <- c(g, "text", g, g, g, g, g, g, g, g)
 # Reading dataset
 raw_data <- read_excel(dataset, col_types = types)
 
-# Creating new DateTime column, removing old Date and Time columns
-raw_data <- raw_data %>%
-  mutate(DateTime = make_datetime(year(Date), month(Date), day(Date),
-                                  hour(hm(Time)), minute(hm(Time))))
+# Rearranging col's and fixing types
+raw_data <- raw_data %>% relocate(Time, .after = Date)
+raw_data$Date <- as.Date(raw_data$Date, format="%Y-%m-%d")
 
-raw_data <- raw_data %>% relocate(DateTime)
-raw_data$Time <- NULL
-raw_data$Date <- NULL
+# Creating new DateTime column, removing old Date and Time columns
+# raw_data <- raw_data %>%
+#   mutate(DateTime = make_datetime(year(Date), month(Date), day(Date),
+#                                   hour(hm(Time)), minute(hm(Time))))
+# 
+# raw_data <- raw_data %>% relocate(DateTime)
+# raw_data$Time <- NULL
+# raw_data$Date <- NULL
 
 raw_data
+
