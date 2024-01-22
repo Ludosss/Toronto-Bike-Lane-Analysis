@@ -21,9 +21,15 @@ types <- c(g, "text", g, g, g, g, g, g, g, g)
 # Reading dataset
 raw_data <- read_excel(dataset, col_types = types)
 
-# Rearranging col's and fixing types
+# Rearranging columns and fixing types
+# Also deleting unnecessary columns
 raw_data <- raw_data %>% relocate(Time, .after = Date)
+raw_data <- raw_data %>% relocate(Incident, .after = `Min Delay`)
 raw_data$Date <- as.Date(raw_data$Date, format="%Y-%m-%d")
+raw_data$Location <- NULL
+raw_data$Direction <- NULL
+raw_data$Vehicle <- NULL
+raw_data$`Min Gap` <- NULL
 
 # Creating new DateTime column, removing old Date and Time columns
 # raw_data <- raw_data %>%
