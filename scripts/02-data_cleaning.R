@@ -1,44 +1,49 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Cleaning the raw TTC bus delay data
+# Author: Xavier Ibanez-Padron
+# Date: 22 January 2024
+# Contact: xavier.ibanezpadron@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: 
+  # 01-download_data.R
+# Any other information needed? N/A
 
 #### Workspace setup ####
 library(tidyverse)
 library(readxl)
+library(openxlsx)
 
 #### Clean data ####
 
 # Variable creation
 g <- "guess"
-dataset <- "inputs/data/ttc-bus-delay-data-2023.xlsx"
+dataset <- "inputs/data/unedited_bus_data.xlsx"
 types <- c(g, "text", g, g, g, g, g, g, g, g)
 
 # Reading dataset
 raw_data <- read_excel(dataset, col_types = types)
 
-# Rearranging columns and fixing types
-# Also deleting unnecessary columns
-raw_data <- raw_data %>% relocate(Time, .after = Date)
-raw_data <- raw_data %>% relocate(Incident, .after = `Min Delay`)
-raw_data$Date <- as.Date(raw_data$Date, format="%Y-%m-%d")
-raw_data$Location <- NULL
-raw_data$Direction <- NULL
-raw_data$Vehicle <- NULL
-raw_data$`Min Gap` <- NULL
+# Rearranging/renaming columns/names and fixing types
+# Selecting only variables necessary for analysis
+cleaned_data <- raw_data %>% 
+  relocate(Time, .after = Date) %>% 
+  relocate(Incident, .after = `Min Delay`) %>% 
+  mutate(Date = as.Date(Date, format="%Y-%m-%d")) %>% 
+  rename(`Delay (min)` = `Min Delay`) %>% 
+  select(Date, Time, Route, Day, `Delay (min)`, Incident) %>%
+  mutate(Incident = case_when(
+    Incident == "Cleaning - Unsanitary" ~ "Cleaning",
+    Incident == "Operations - Operator" ~ "Operations",
+    Incident == "Road Blocked - NON-TTC Collision" ~ "Road Blocked",
+    Incident == "Collision - TTC" ~ "TTC Collision",
+    Incident == "Utilized Off Route" ~ "Off Route",
+    TRUE ~ Incident
+  ))
 
-# Creating new DateTime column, removing old Date and Time columns
-# raw_data <- raw_data %>%
-#   mutate(DateTime = make_datetime(year(Date), month(Date), day(Date),
-#                                   hour(hm(Time)), minute(hm(Time))))
-# 
-# raw_data <- raw_data %>% relocate(DateTime)
-# raw_data$Time <- NULL
-# raw_data$Date <- NULL
+# Write cleaned data as excel file
+write.xlsx(
+  x = cleaned_data,
+  file = "inputs/data/cleaned_bus_data.xlsx"
+)
 
-raw_data
 
