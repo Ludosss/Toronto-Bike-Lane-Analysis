@@ -1,10 +1,9 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Toronto Transit Commision Bus Delays: An Analysis"
+subtitle: "A Journey Through a Calendar Year"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Xavier Ibanez-Padron
+thanks: "Code and data are available at: https://github.com/Ludosss/Toronto-Bus-Delay-Analysis"
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
@@ -25,7 +24,13 @@ library(palmerpenguins)
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. 
+All throughout the world, functional transit systems have been one of the key features
+of progress and development, and notable among these transit systems is the Toronto Transit Commission, or the TTC. In service since 1921 [@TTC1921], the TTC offers subway, streetcar, and bus routes throughout the City of Toronto and beyond. In particular the TTC Bus system is of interest, supplying more than half
+of the TTC's entire yearly throughput, with nearly 280 million riders serviced in 2022 alone [@TTC2022]. With such a massive role in maintaining cohesion within the streets of Toronto, it is imperative to
+consider not just its strengths, but also its weaknesses. Of these weaknesses, one of significant concern is delays - commonly leaving commuters stranded within the city, every day.
+
+With 162 standard routes as of 2022 [@TTCRoutes], minimizing delays of any kind
+is crucial in ensuring smooth operations. 
 
 The remainder of this paper is structured as follows. @sec-data....
 
@@ -33,7 +38,7 @@ The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+This paper uses the TTC Bus Delay Data [@busdata] retrieved from the City of Toronto's Open Data Portal via the opendatatoronto library [@datator]. The dataset contains data regarding numerous factors that constitute a bus delay
 
 ```{r}
 #| label: fig-bills
@@ -93,7 +98,7 @@ y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
 \sigma &\sim \mbox{Exponential}(1)
 \end{align}
 
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`. We also use @tidyverse
 
 
 ### Model justification
@@ -165,51 +170,15 @@ Weaknesses and next steps should also be included.
 
 ## Posterior predictive check
 
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
 
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
 
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
 
 ## Diagnostics
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
 
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
 
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
 
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
 
 
 
