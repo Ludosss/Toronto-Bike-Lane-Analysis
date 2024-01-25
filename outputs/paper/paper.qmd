@@ -18,7 +18,8 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
+library(knitr)
+library(readxl)
 ```
 
 
@@ -38,23 +39,21 @@ The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
 
-This paper uses the TTC Bus Delay Data [@busdata] retrieved from the City of Toronto's Open Data Portal via the opendatatoronto library [@datator]. The dataset contains data regarding numerous factors that constitute a bus delay
+This paper uses the TTC Bus Delay Data [@busdata] retrieved from the City of Toronto's Open Data Portal via the opendatatoronto library [@datator], published by the TTC itself. This dataset was last refreshed on January 14, 2024, and contains bus delay data for the past 10 full calendar years, with every documented TTC bus delay stored within the data.
+
+The dataset used the 2023 delay data, with over 56,000 data points. The dataset contains data regarding numerous factors that constitute a bus delay, but of particular importance for this analysis are the Date, Time, Route, Day, Delay (min), and Incident.
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: cleaned_data
+#| fig-cap: Table showing the cleaned data
 #| echo: false
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+analysis_data <- read_excel(here::here("outputs/data/cleaned_bus_data.xlsx"))
+
+kable(head(analysis_data), caption = "Sample of Cleaned TTC Bus Delay Data")
 ```
 
-Talk more about it.
+The process of data cleaning and analyzing was done in R [@citeR] using the tidyverse [@tverse], readxl [@rdxl], and openxlsx [@opxl] packages
 
 And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 

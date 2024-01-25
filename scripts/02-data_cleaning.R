@@ -43,7 +43,7 @@ cleaned_data <- raw_data %>%
 # Write cleaned data as excel file
 write.xlsx(
   x = cleaned_data,
-  file = "inputs/data/cleaned_bus_data.xlsx"
+  file = "outputs/data/cleaned_bus_data.xlsx"
 )
 
 
